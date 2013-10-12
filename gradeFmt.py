@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import sys
 
 bars = 15
@@ -10,7 +12,7 @@ def isNum(word):
 		return False
 
 def remDot(fname):
-	loc = fname.rfind(".")
+	loc = fname.rfind('.')
 	if loc == -1:
 		return fname
 	return fname[:loc]
@@ -47,12 +49,11 @@ def dispRange(a,b):
 	return str(a)+'-'+str(b)
 
 def main():
-	inname = 'grades.csv'
-	outname = 'proc.tab'
-
 	if len(sys.argv) > 1:
 		inname = sys.argv[1]
-		outname = remDot(inname)+".tab"
+		outname = remDot(inname)+'.tab'
+	else:
+		quit('Please specify .csv file to process.')
 
 	outFile = open(outname,'wb')
 	inFile = open(inname,'rb')
@@ -65,7 +66,7 @@ def main():
 
 	for line in fileContents:
 		lines+=1
-		data = line.split(",")
+		data = line.split(',')
 		toCheck = []
 		for datum in data:
 			if isNum(datum) or (intPart(datum) != -1 and intPart(datum)>=999):	
@@ -90,7 +91,7 @@ def main():
 	print 'Output written to '+outname
 
 	print '\nStats:'
-	print 'Min:%d\tMax:%d\tMean:%.2f\t'%(minS,maxS,meanS)
+	print 'Min: %d\tMax: %d\tMean: %.2f\t' % (minS,maxS,meanS)
 	print ''
 
 	step = (maxS-minS)/bars
