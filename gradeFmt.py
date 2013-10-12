@@ -1,6 +1,6 @@
 import sys
 
-outname = 'proc.tab'
+bars = 15
 
 def isNum(word):
 	try:
@@ -9,14 +9,53 @@ def isNum(word):
 	except:
 		return False
 
+def remDot(fname):
+	loc = fname.rfind(".")
+	if loc == -1:
+		return fname
+	return fname[:loc]
+
+def cnt(lst,a,b):
+	total = 0
+	for x in xrange(a,b+1):
+		# print x, lst.count(x)
+		total += lst.count(x)
+	return total
+
+def mean(seat):
+	tote = 0 
+	for memb in seat:
+		tote += float(memb)
+	return tote / float(len(seat))
+
+def intPart(strng):
+	ans = 0
+	real = False
+	for let in strng:
+		if isNum(let):
+			real = True
+			ans*=10
+			ans+=int(let)
+
+	if not real:
+		return -1
+	return ans
+
+def dispRange(a,b):
+	if a==b:
+		return str(a)
+	return str(a)+'-'+str(b)
+
 def main():
 	inname = 'grades.csv'
+	outname = 'proc.tab'
 
 	if len(sys.argv) > 1:
 		inname = sys.argv[1]
+		outname = remDot(inname)+".tab"
 
-	outFile = open(outname, 'wb')
-	inFile = open(inname,"rb")
+	outFile = open(outname,'wb')
+	inFile = open(inname,'rb')
 
 	fileContents = inFile.read().splitlines()
 	inFile.close()
@@ -29,9 +68,9 @@ def main():
 		data = line.split(",")
 		toCheck = []
 		for datum in data:
-			if isNum(datum):	
-				toCheck.append(int(datum))
-		
+			if isNum(datum) or (intPart(datum) != -1 and intPart(datum)>=999):	
+				toCheck.append(intPart(datum))
+
 		toCheck.sort()
 		toCheck.reverse()
 
@@ -44,8 +83,21 @@ def main():
 
 	outFile.close()
 
+	minS,maxS = min(scores),max(scores)
+	meanS = mean(scores)
+
 	print '%d line read. %d students found.' % (lines, students)
 	print 'Output written to '+outname
-	print scores
+
+	print '\nStats:'
+	print 'Min:%d\tMax:%d\tMean:%.2f\t'%(minS,maxS,meanS)
+	print ''
+
+	step = (maxS-minS)/bars
+	step = max([step, 1])
+
+	for x in xrange(minS,maxS+1,step):
+		print dispRange(x,x+step-1)+'\t'+ '+'* cnt(scores,x,x+step-1)
+
 
 main()
