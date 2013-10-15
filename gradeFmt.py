@@ -79,8 +79,9 @@ def main():
 			students+=1
 			uid, grade = toCheck[0],toCheck[1]
 			# print uid, grade
-			outFile.write(str(uid)+'\t\t'+str(grade)+'\t\n')
-			scores.append(grade)
+			if grade > 0 and uid > 999:
+				outFile.write(str(uid)+'\t\t'+str(grade)+'\t\n')
+				scores.append(grade)
 
 	outFile.close()
 
