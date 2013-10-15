@@ -38,3 +38,6 @@ nosetests.xml
 # Input/Output files
 *.csv
 *.tab
+
+#gedit
+*.*~
